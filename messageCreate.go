@@ -15,7 +15,7 @@ func messageCreate(s *dg.Session, m *dg.MessageCreate) {
 
     // Useful when responding to commands.
     command := strings.Split(strings.TrimPrefix(m.Content, prefix), " ")[0]
-    args := strings.Split(strings.TrimPrefix(m.Content, prefix + command), " ")
+    args := strings.Split(strings.TrimSpace(strings.TrimPrefix(m.Content, prefix + command)), " ")
 
     if command == "ping" {
         commands.Ping(s, m, args)
@@ -24,6 +24,16 @@ func messageCreate(s *dg.Session, m *dg.MessageCreate) {
 
     if command == "gping" {
         commands.Gping(s, m, args)
+        return
+    }
+
+    if command == "color" {
+        commands.Color(s, m, args)
+        return
+    }
+
+    if command == "tzone" {
+        commands.Tzone(s, m, args)
         return
     }
 
