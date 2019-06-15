@@ -87,4 +87,10 @@ func Verify(s *dg.Session, m *dg.MessageCreate, args []string) {
         },
     })
 
+    // Housekeeping
+    s.GuildMemberNickname(m.GuildID, m.Author.ID, info.RobloxUsername)
+    s.GuildMemberRoleAdd(m.GuildID, m.Author.ID, "500251314039554058")
+
+    return
+
 }
