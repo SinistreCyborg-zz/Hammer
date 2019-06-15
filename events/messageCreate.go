@@ -39,4 +39,9 @@ func MessageCreate(s *dg.Session, m *dg.MessageCreate) {
         return
     }
 
+    if command == "verify" {
+        commands.Verify(s, m, args)
+        return
+    }
+
 }
