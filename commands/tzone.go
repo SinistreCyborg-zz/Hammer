@@ -1,7 +1,6 @@
 package commands
 
 import (
-    "fmt"
     "strings"
     dg "github.com/bwmarrin/discordgo"
 )
@@ -9,11 +8,7 @@ import (
 func Tzone(s *dg.Session, m *dg.MessageCreate, args []string) {
 
     // Get the guild the command was in.
-    guild, err := s.Guild(m.GuildID)
-    if err != nil {
-        fmt.Println("An error occurred...", err)
-        return
-    }
+    guild, _ := s.Guild(m.GuildID)
 
     // Get all the timezones.
     tzones := make([]*dg.Role, 0)
@@ -29,12 +24,20 @@ func Tzone(s *dg.Session, m *dg.MessageCreate, args []string) {
         for _, tzone := range tzones {
             if strings.TrimSuffix(tzone.Name, "⏳") == strings.Join(args[1:], " ") {
 
-                // Add the timezone, if such a timezone exists.
-                err := s.GuildMemberRoleAdd(m.GuildID, m.Author.ID, tzone.ID)
-                if err != nil {
-                    fmt.Println("An error occurred...", err)
-                    return
+                // Get the member object.
+                member, _ := s.GuildMember(m.GuildID, m.Author.ID)
+
+                // Remove all timezone roles.
+                for _, role := range member.Roles {
+                    for _, tzone := range tzones {
+                        if role == tzone.ID {
+                            s.GuildMemberRoleRemove(m.GuildID, m.Author.ID, tzone.ID)
+                        }
+                    }
                 }
+
+                // Add the timezone, if such a timezone exists.
+                s.GuildMemberRoleAdd(m.GuildID, m.Author.ID, tzone.ID)
 
                 // Inform the user that the timezone was added.
                 s.ChannelMessageSend(m.ChannelID, "Your timezone is now set to: " + tzone.Mention())

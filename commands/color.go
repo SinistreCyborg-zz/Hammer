@@ -1,7 +1,6 @@
 package commands
 
 import (
-    "fmt"
     "strings"
     dg "github.com/bwmarrin/discordgo"
 )
@@ -9,11 +8,7 @@ import (
 func Color(s *dg.Session, m *dg.MessageCreate, args []string) {
 
     // Get the guild the command was in.
-    guild, err := s.Guild(m.GuildID)
-    if err != nil {
-        fmt.Println("An error occurred...", err)
-        return
-    }
+    guild, _ := s.Guild(m.GuildID)
 
     // Get all the colors.
     colors := make([]*dg.Role, 0)
@@ -29,12 +24,20 @@ func Color(s *dg.Session, m *dg.MessageCreate, args []string) {
         for _, color := range colors {
             if strings.TrimPrefix(color.Name, "#") == strings.Join(args[1:], " ") {
 
-                // Add the color, if such a color exists.
-                err := s.GuildMemberRoleAdd(m.GuildID, m.Author.ID, color.ID)
-                if err != nil {
-                    fmt.Println("An error occurred...", err)
-                    return
+                // Get the member object.
+                member, _ := s.GuildMember(m.GuildID, m.Author.ID)
+
+                // Remove all color roles.
+                for _, role := range member.Roles {
+                    for _, color := range colors {
+                        if role == color.ID {
+                            s.GuildMemberRoleRemove(m.GuildID, m.Author.ID, color.ID)
+                        }
+                    }
                 }
+
+                // Add the color, if such a color exists.
+                s.GuildMemberRoleAdd(m.GuildID, m.Author.ID, color.ID)
 
                 // Inform the user that the color was added.
                 s.ChannelMessageSend(m.ChannelID, "You're now: " + color.Mention())
