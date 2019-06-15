@@ -6,7 +6,6 @@ import (
     "io/ioutil"
     "net/http"
     "strings"
-    "strconv"
     dg "github.com/bwmarrin/discordgo"
 )
 
@@ -70,22 +69,8 @@ func Verify(s *dg.Session, m *dg.MessageCreate, args []string) {
         return
     }
 
-    // Get user's thumbnail.
-    var thumb RBLXResponse
-    json.Unmarshal(get("https://thumbnails.roblox.com/v1/users/avatar?userIds=" + strconv.Itoa(info.RobloxID) + "&size=720x720&format=Png"), &thumb)
-
-    // Get user's friends.
-    var friends RBLXFriends
-    json.Unmarshal(get("https://friends.roblox.com/v1/users/" + strconv.Itoa(info.RobloxID) + "/friends"), &friends)
-
-    // Send info about the user.
-    s.ChannelMessageSendEmbed(m.ChannelID, &dg.MessageEmbed{
-        Color: 0x34363b,
-        Description: "You're verified as: **" + info.RobloxUsername + "**\n\n" + strconv.Itoa(len(friends.Data)) + " Friends",
-        Thumbnail: &dg.MessageEmbedThumbnail{
-            URL: thumb.Data[0].ImageURL,
-        },
-    })
+    // Send confirmation message.
+    s.ChannelMessageSend(m.ChannelID, "You're verified as: `" + info.RobloxUsername + "`")
 
     // Housekeeping
     s.GuildMemberNickname(m.GuildID, m.Author.ID, info.RobloxUsername)
