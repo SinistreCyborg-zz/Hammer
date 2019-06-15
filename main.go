@@ -22,6 +22,8 @@ func main() {
         return
     }
 
+    dg.AddHandler(messageCreate)
+
     // Open Websocket connection.
     err = dg.Open()
     if err != nil {
