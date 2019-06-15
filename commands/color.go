@@ -22,7 +22,7 @@ func Color(s *dg.Session, m *dg.MessageCreate, args []string) {
     if args[0] == "set" {
 
         for _, color := range colors {
-            if strings.TrimPrefix(color.Name, "#") == strings.Join(args[1:], " ") {
+            if strings.ToLower(strings.TrimPrefix(color.Name, "#")) == strings.ToLower(strings.Join(args[1:], " ")) {
 
                 // Get the member object.
                 member, _ := s.GuildMember(m.GuildID, m.Author.ID)

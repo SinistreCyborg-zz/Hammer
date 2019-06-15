@@ -6,23 +6,20 @@ import (
     "os/signal"
     "syscall"
     "github.com/bwmarrin/discordgo"
+    "hammer/events"
 )
 
-var (
-    token string = "Bot " + os.Getenv("token")
-    prefix string = ":"
-)
 
 func main() {
 
     // Create a new Discord session with the provided token.
-    dg, err := discordgo.New(token)
+    dg, err := discordgo.New("Bot " + os.Getenv("token"))
     if err != nil {
         fmt.Println("Error creating Discord session...", err)
         return
     }
 
-    dg.AddHandler(messageCreate)
+    dg.AddHandler(events.MessageCreate)
 
     // Open Websocket connection.
     err = dg.Open()
@@ -32,7 +29,7 @@ func main() {
     }
 
     // Wait here until Ctrl-C or some other term signal.
-    fmt.Println("Bot is now running.  Press Ctrl-C to exit.")
+    fmt.Println("Bot is now running. Press Ctrl-C to exit.")
     sc := make(chan os.Signal, 1)
     signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
     <-sc

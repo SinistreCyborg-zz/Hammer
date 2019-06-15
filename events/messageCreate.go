@@ -1,4 +1,4 @@
-package main
+package events
 
 import (
     "strings"
@@ -6,7 +6,9 @@ import (
     "hammer/commands"
 )
 
-func messageCreate(s *dg.Session, m *dg.MessageCreate) {
+var prefix string = ":"
+
+func MessageCreate(s *dg.Session, m *dg.MessageCreate) {
 
     // Ignore messages that don't start with the prefix.
     if strings.HasPrefix(m.Content, prefix) == false {

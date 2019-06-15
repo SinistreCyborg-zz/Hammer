@@ -22,7 +22,7 @@ func Tzone(s *dg.Session, m *dg.MessageCreate, args []string) {
     if args[0] == "set" {
 
         for _, tzone := range tzones {
-            if strings.TrimSuffix(tzone.Name, "⏳") == strings.Join(args[1:], " ") {
+            if strings.ToLower(strings.TrimSuffix(tzone.Name, "⏳")) == strings.ToLower(strings.Join(args[1:], " ")) {
 
                 // Get the member object.
                 member, _ := s.GuildMember(m.GuildID, m.Author.ID)
