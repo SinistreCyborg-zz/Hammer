@@ -3,6 +3,7 @@ package main
 import (
     "strings"
     dg "github.com/bwmarrin/discordgo"
+    "hammer/commands"
 )
 
 func messageCreate(s *dg.Session, m *dg.MessageCreate) {
@@ -14,10 +15,10 @@ func messageCreate(s *dg.Session, m *dg.MessageCreate) {
 
     // Useful when responding to commands.
     command := strings.Split(strings.TrimPrefix(m.Content, prefix), " ")[0]
-    // args := strings.TrimPrefix(m.Content, prefix + command)
+    args := strings.Split(strings.TrimPrefix(m.Content, prefix + command), " ")
 
     if command == "ping" {
-        s.ChannelMessageSend(m.ChannelID, "🏓 Pong!")
+        commands.Ping(s, m, args)
         return
     }
 
