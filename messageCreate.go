@@ -22,4 +22,9 @@ func messageCreate(s *dg.Session, m *dg.MessageCreate) {
         return
     }
 
+    if command == "gping" {
+        commands.Gping(s, m, args)
+        return
+    }
+
 }
