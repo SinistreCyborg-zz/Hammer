@@ -64,8 +64,7 @@ func Verify(s *dg.Session, m *dg.MessageCreate, args []string) {
 
     // Tell user to verify again.
     if info.Status != "ok" || strings.Contains(strings.Join(args, " "), "--force") {
-        s.ChannelMessageSend(m.Author.ID, "Uh, oh! You're not verified! Follow the instructions here: https://verify.eryn.io/\nThen, run the verify command again inside of the Hammer Squad Discord.")
-        s.ChannelMessageSend(m.ChannelID, "<@" + m.Author.ID + ">, I've DMed you instructions on how to verify.")
+        s.ChannelMessageSend(m.ChannelID, "Uh, oh! You're not verified! Follow the instructions here: https://verify.eryn.io/\nThen, run the verify command again.")
         return
     }
 
